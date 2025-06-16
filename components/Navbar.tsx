@@ -1,11 +1,12 @@
 // src/Navbar.js
 import React, { useState } from "react";
-import { useAuth } from "../context/AuthContext"; 
-import { LogOut, UserRound } from "lucide-react";
+import { useAuth } from "../context/AuthContext";
+import { LogOut, User, X } from "lucide-react";
 import Link from "next/link";
+import Image from "next/image";
 
 const Navbar = () => {
-  const { isLoggedIn, logout } = useAuth(); 
+  const { isLoggedIn, logout } = useAuth();
   const [menuOpen, setMenuOpen] = useState(false);
 
   const toggleMenu = () => {
@@ -21,7 +22,7 @@ const Navbar = () => {
       </div>
       <div className="navRight">
         <div className="responsiveMenu" onClick={toggleMenu}>
-          <img src="images/menu.png" alt="menu" height={"22px"} />
+   <Image src="/images/menu.png" alt="menu" width={22} height={22} />
         </div>
         <div className={`btns ${menuOpen ? "active" : ""}`}>
           <Link
@@ -30,24 +31,39 @@ const Navbar = () => {
             onClick={toggleMenu}
             style={{ display: menuOpen ? "block" : "none" }}
           >
-            <img src="images/cut.png" alt="close menu" height={"30px"} />
+            {/* <img src="images/cut.png" alt="close menu" height={"30px"} /> */}
+            <X size={40} className="text-white" />
           </Link>
-            <Link className="btn px-4 py-2 cursor-pointer text-white rounded-lg flex justify-center items-center " id="genBtn" href="/create">
-              {/* <i className="fa-solid fa-palette" style={{ color: "#fff" }}></i>{" "} */}
-              {/* <i class="fa-solid fa-palette"></i> */}
-              <img src="images/paint5.png" className="rounded-lg h-[30px] w-auto rotate-[315deg]" alt="" />
-              Generate image
-            </Link>
+          <Link
+            className="btn px-4 py-2 cursor-pointer text-wh rounded-lg flex justify-center items-center gap-2"
+            id="genBtn"
+            href="/create"
+          >
+           <Image
+              src="/images/paint5.png"
+              alt="Paint stroke"
+              width={24} // h-6 is 1.5rem = 24px
+              height={24} // assuming a square image — you can change height if needed
+              className="rounded-lg w-auto rotate-[315deg]"
+            />
+            Generate image
+          </Link>
           {isLoggedIn ? (
-            <button className="btn px-4 py-2 cursor-pointer text-white flex gap-2 bg-[#253b50] rounded-lg hover:bg-[#384d60]" onClick={logout}>
-              <LogOut/>
+            <button
+              className="btn px-4 py-2 cursor-pointer text-wh flex gap-2 bg-[#253b50] rounded-lg hover:bg-[#384d60]"
+              onClick={logout}
+            >
+              <LogOut />
               Logout
             </button>
           ) : (
-              <Link href="/login" className="btn px-4 py-2 cursor-pointer text-white flex gap-2 bg-[#253b50] rounded-lg hover:bg-[#384d60]">
-                <UserRound />
-                SignIn / Login
-              </Link> 
+            <Link
+              href="/login"
+              className="btn px-4 py-2 cursor-pointer text-wh flex gap-2 bg-[#253b50] rounded-lg hover:bg-[#384d60]"
+            >
+              <User />
+              SignIn / Login
+            </Link>
           )}
         </div>
       </div>

@@ -1,16 +1,17 @@
-'use client';
-import React, { useState, useEffect } from 'react';
-import axios from 'axios';
-import Link from 'next/link';
-import Navbar from '../components/Navbar';
-import ImageCard from '../components/ImageCard';
-import Loader from '../components/Loader';
-import ScrollToTop from '../components/ScrollToTop';
-import HeroSection from '../components/HeroSection';
-import { useSearch } from '../context/SearchContext';
-import { Post } from '../types';
-import { Search, Send } from 'lucide-react';
-import { toast } from 'sonner';
+"use client";
+import React, { useState, useEffect } from "react";
+import axios from "axios";
+import Link from "next/link";
+import Navbar from "../components/Navbar";
+import ImageCard from "../components/ImageCard";
+import Loader from "../components/Loader";
+import ScrollToTop from "../components/ScrollToTop";
+import HeroSection from "../components/HeroSection";
+import { useSearch } from "../context/SearchContext";
+import { Post } from "../types";
+import { Search, Send } from "lucide-react";
+import { toast } from "sonner";
+import Image from "next/image";
 
 const Home: React.FC = () => {
   const [posts, setPosts] = useState<Post[]>([]);
@@ -21,13 +22,15 @@ const Home: React.FC = () => {
   const fetchImages = async () => {
     setLoading(true);
     try {
-      const res = await axios.get('/api/posts');
+      const res = await axios.get("/api/posts");
       const data = Array.isArray(res.data) ? res.data : [];
       setPosts(data);
       setFilterPosts(data);
     } catch (err: any) {
-      console.error('Error fetching posts:', err);
-      toast.error(err.response?.data?.message || 'Failed to load posts. Please try again.');
+      console.error("Error fetching posts:", err);
+      toast.error(
+        err.response?.data?.message || "Failed to load posts. Please try again."
+      );
       setPosts([]);
       setFilterPosts([]);
     } finally {
@@ -84,13 +87,21 @@ const Home: React.FC = () => {
             ))
           ) : (
             <div className="col-span-full flex flex-col items-center justify-center text-center w-[98vw]">
-              <img
+              {/* <img
                 src="https://res.cloudinary.com/dpmengi5q/image/upload/v1735578462/noData_2_ohoj6z.png"
                 alt="No Data"
                 className="w-full max-w-xs h-auto"
+              /> */}
+              <Image
+                src="https://res.cloudinary.com/dpmengi5q/image/upload/v1735578462/noData_2_ohoj6z.png"
+                alt="No Data"
+                width={300} // or appropriate width in pixels
+                height={200} // adjust based on aspect ratio of your image
+                className="w-full max-w-xs h-auto"
               />
               <h3 className="text-white mt-4 font-semibold">
-                No results! Press &apos;Generate Image&apos; to craft your image.
+                No results! Press &apos;Generate Image&apos; to craft your
+                image.
               </h3>
               <Link
                 href="/create"

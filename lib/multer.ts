@@ -1,5 +1,4 @@
 import multer from 'multer';
-import { join } from 'path';
 import { tmpdir } from 'os';
 
 const storage = multer.diskStorage({
