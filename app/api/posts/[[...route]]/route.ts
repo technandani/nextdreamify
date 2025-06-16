@@ -22,7 +22,7 @@ export async function POST(req: NextRequest) {
     try {
       decoded = jwt.verify(token, secret);
     } catch (error) {
-      return NextResponse.json({ success: false, message: 'Invalid token.' }, { status: 401 });
+      return NextResponse.json({ success: false, message: error.message || 'Invalid token.' }, { status: 401 });
     }
 
     const { url, prompt } = await req.json();
@@ -47,7 +47,7 @@ export async function POST(req: NextRequest) {
   }
 }
 
-export async function GET(req: NextRequest) {
+export async function GET() {
   try {
     await connectMongoDB();
     const posts = await Post.find({}).sort({ _id: -1 }).populate('user', 'name profilePic');

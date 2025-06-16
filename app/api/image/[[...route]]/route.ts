@@ -30,7 +30,7 @@ export async function GET(req: NextRequest) {
       uploadStream.end(response.data);
     });
 
-    const newImage = await Image.create({ url: uploadResult.secure_url, prompt });
+    await Image.create({ url: uploadResult.secure_url, prompt });
     return NextResponse.json({ imageUrl: uploadResult.secure_url });
   } catch (error) {
     console.error('Error generating or uploading image:', error);

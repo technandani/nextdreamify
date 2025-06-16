@@ -9,18 +9,17 @@ import ScrollToTop from '../components/ScrollToTop';
 import HeroSection from '../components/HeroSection';
 import { useSearch } from '../context/SearchContext';
 import { Post } from '../types';
-import { Paperclip, Search, Send } from 'lucide-react';
+import { Search, Send } from 'lucide-react';
+import { toast } from 'sonner';
 
 const Home: React.FC = () => {
   const [posts, setPosts] = useState<Post[]>([]);
   const [filterPosts, setFilterPosts] = useState<Post[]>([]);
   const [loading, setLoading] = useState(false);
-  const [error, setError] = useState<string | null>(null);
   const { search, setSearch } = useSearch();
 
   const fetchImages = async () => {
     setLoading(true);
-    setError(null);
     try {
       const res = await axios.get('/api/posts');
       const data = Array.isArray(res.data) ? res.data : [];
@@ -28,7 +27,7 @@ const Home: React.FC = () => {
       setFilterPosts(data);
     } catch (err: any) {
       console.error('Error fetching posts:', err);
-      setError(err.response?.data?.message || 'Failed to load posts. Please try again.');
+      toast.error(err.response?.data?.message || 'Failed to load posts. Please try again.');
       setPosts([]);
       setFilterPosts([]);
     } finally {

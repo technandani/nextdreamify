@@ -5,7 +5,7 @@ import axios from 'axios';
 import cloudinary from '../../../../lib/cloudinary';
 import connectMongoDB from '../../../../lib/mongodb';
 import User from '@models/user';
-import { upload } from '../../../../lib/multer';
+// import { upload } from '../../../../lib/multer';
 
 const secret = process.env.JWT_SECRET as string;
 
