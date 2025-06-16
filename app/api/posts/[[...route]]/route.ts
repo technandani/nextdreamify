@@ -1,0 +1,62 @@
+import { NextRequest, NextResponse } from 'next/server';
+import jwt from 'jsonwebtoken';
+import connectMongoDB from '@/lib/mongodb'; // Adjust path
+import Post from '@models/post'; // Adjust path
+import User from '@models/user'; // Adjust path
+
+const secret = process.env.JWT_SECRET as string;
+
+// Debug log to confirm model imports
+console.log('Post model loaded:', !!Post);
+console.log('User model loaded:', !!User);
+
+export async function POST(req: NextRequest) {
+  try {
+    await connectMongoDB();
+    const token = req.headers.get('authorization')?.split(' ')[1];
+    if (!token) {
+      return NextResponse.json({ success: false, message: 'User not logged in. Token missing.' }, { status: 401 });
+    }
+
+    let decoded;
+    try {
+      decoded = jwt.verify(token, secret);
+    } catch (error) {
+      return NextResponse.json({ success: false, message: 'Invalid token.' }, { status: 401 });
+    }
+
+    const { url, prompt } = await req.json();
+    if (!url || !prompt) {
+      return NextResponse.json({ success: false, message: 'URL and prompt are required.' }, { status: 400 });
+    }
+
+    const newPost = await Post.create({
+      user: decoded._id,
+      url,
+      prompt,
+      visitingTime: [new Date()],
+    });
+
+    return NextResponse.json({ success: true, message: 'Post created successfully.', post: newPost });
+  } catch (error) {
+    console.error('Server error:', error);
+    return NextResponse.json(
+      { success: false, message: process.env.NODE_ENV === 'development' ? (error as Error).message : 'Internal server error.' },
+      { status: 500 }
+    );
+  }
+}
+
+export async function GET(req: NextRequest) {
+  try {
+    await connectMongoDB();
+    const posts = await Post.find({}).sort({ _id: -1 }).populate('user', 'name profilePic');
+    return NextResponse.json(posts);
+  } catch (error) {
+    console.error('Error fetching posts:', error);
+    return NextResponse.json(
+      { message: process.env.NODE_ENV === 'development' ? (error as Error).message : 'Error fetching posts' },
+      { status: 500 }
+    );
+  }
+}
