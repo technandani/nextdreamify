@@ -1,6 +1,7 @@
 "use client";
 import React, { useState, useEffect } from "react";
 import axios from "axios";
+import { AxiosError } from "axios";
 import Link from "next/link";
 import Navbar from "../components/Navbar";
 import ImageCard from "../components/ImageCard";
@@ -19,24 +20,27 @@ const Home: React.FC = () => {
   const [loading, setLoading] = useState(false);
   const { search, setSearch } = useSearch();
 
-  const fetchImages = async () => {
-    setLoading(true);
-    try {
-      const res = await axios.get("/api/posts");
-      const data = Array.isArray(res.data) ? res.data : [];
-      setPosts(data);
-      setFilterPosts(data);
-    } catch (err: unknown) {
-      console.error("Error fetching posts:", err);
-      toast.error(
-        err.response?.data?.message || "Failed to load posts. Please try again."
-      );
-      setPosts([]);
-      setFilterPosts([]);
-    } finally {
-      setLoading(false);
-    }
-  };
+
+const fetchImages = async () => {
+  setLoading(true);
+  try {
+    const res = await axios.get("/api/posts");
+    const data = Array.isArray(res.data) ? res.data : [];
+    setPosts(data);
+    setFilterPosts(data);
+  } catch (err: unknown) {
+    console.error("Error fetching posts:", err);
+    const error = err as AxiosError<{ message?: string }>;
+    toast.error(
+      error.response?.data?.message || "Failed to load posts. Please try again."
+    );
+    setPosts([]);
+    setFilterPosts([]);
+  } finally {
+    setLoading(false);
+  }
+};
+
 
   useEffect(() => {
     fetchImages();
