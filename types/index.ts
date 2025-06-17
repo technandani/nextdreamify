@@ -20,3 +20,9 @@ export interface Post {
   prompt: string;
   visitingTime: string[];
 }
+
+export interface CloudinaryUploadResult {
+  secure_url: string;
+  public_id: string;
+  [key: string]: unknown;
+};

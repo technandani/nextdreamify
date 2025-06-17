@@ -3,6 +3,7 @@ import axios from 'axios';
 import cloudinary from '../../../../lib/cloudinary';
 import connectMongoDB from '../../../../lib/mongodb';
 import Image from '../../../../models/image';
+import { CloudinaryUploadResult } from '@/types';
 
 export async function GET(req: NextRequest) {
   const { searchParams } = new URL(req.url);
@@ -29,12 +30,12 @@ export async function GET(req: NextRequest) {
       return NextResponse.json({ message: 'Failed to fetch image from Pollinations' }, { status: 500 });
     }
 
-    const uploadResult = await new Promise<any>((resolve, reject) => {
+    const uploadResult: CloudinaryUploadResult = await new Promise((resolve, reject) => {
       const uploadStream = cloudinary.uploader.upload_stream(
         { resource_type: 'image', secure: true },
         (error, result) => {
           if (error) reject(error);
-          else resolve(result);
+          else resolve(result as CloudinaryUploadResult);
         }
       );
       uploadStream.end(response.data);

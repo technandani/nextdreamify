@@ -5,12 +5,7 @@ import axios from 'axios';
 import cloudinary from '../../../../lib/cloudinary';
 import connectMongoDB from '../../../../lib/mongodb';
 import User from '@models/user';
-
-type CloudinaryUploadResult = {
-  secure_url: string;
-  public_id: string;
-  [key: string]: unknown;
-};
+import { CloudinaryUploadResult } from '@/types';
 
 const secret = process.env.JWT_SECRET as string;
 
