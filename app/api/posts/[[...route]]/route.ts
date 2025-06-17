@@ -1,9 +1,13 @@
 import { NextRequest, NextResponse } from "next/server";
-import jwt from "jsonwebtoken";
+import jwt, { JwtPayload } from "jsonwebtoken";
 import connectMongoDB from "@/lib/mongodb";
-import Post from "@models/post"; 
+import Post from "@models/post";
 
 const secret = process.env.JWT_SECRET as string;
+
+interface MyJwtPayload extends JwtPayload {
+  _id: string;
+}
 
 export async function POST(req: NextRequest) {
   try {
@@ -16,9 +20,16 @@ export async function POST(req: NextRequest) {
       );
     }
 
-    let decoded;
+    let decoded: MyJwtPayload;
     try {
-      decoded = jwt.verify(token, secret);
+      const verified = jwt.verify(token, secret);
+      if (typeof verified === "string" || !("_id" in verified)) {
+        return NextResponse.json(
+          { success: false, message: "Invalid token payload." },
+          { status: 401 }
+        );
+      }
+      decoded = verified as MyJwtPayload;
     } catch (error) {
       const message = error instanceof Error ? error.message : "Invalid token.";
       return NextResponse.json({ success: false, message }, { status: 401 });
