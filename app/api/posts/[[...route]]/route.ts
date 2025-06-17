@@ -1,8 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import jwt from "jsonwebtoken";
-import connectMongoDB from "@/lib/mongodb"; // Adjust path
-import Post from "@models/post"; // Adjust path
-import User from "@models/user"; // Adjust path
+import connectMongoDB from "@/lib/mongodb";
+import Post from "@models/post"; 
 
 const secret = process.env.JWT_SECRET as string;
 
@@ -34,7 +33,7 @@ export async function POST(req: NextRequest) {
     }
 
     const newPost = await Post.create({
-      user: decoded._id,
+      user: decoded?._id,
       url,
       prompt,
       visitingTime: [new Date()],
