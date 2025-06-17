@@ -45,10 +45,15 @@ const Create: React.FC = () => {
       toast.success("Image generated successfully!");
     } catch (err: unknown) {
       console.error("Error generating image:", err);
-      const message =
-        err.response?.status === 503
-          ? "Image generation service is temporarily unavailable. Please try again later."
-          : "Failed to generate image. Please check your connection and try again.";
+      let message =
+        "Failed to generate image. Please check your connection and try again.";
+
+      if (axios.isAxiosError(err)) {
+        if (err.response?.status === 503) {
+          message =
+            "Image generation service is temporarily unavailable. Please try again later.";
+        }
+      }
       toast.error(message);
     } finally {
       setGenerating(false);
