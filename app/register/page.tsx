@@ -7,6 +7,7 @@ import Navbar from '../../components/Navbar';
 import { useRouter } from 'next/navigation';
 import { toast } from 'sonner'
 import { useAuth } from '@/context/AuthContext';
+import Image from 'next/image';
 
 const Register: React.FC = () => {
   const [name, setName] = useState('');
@@ -146,7 +147,7 @@ const Register: React.FC = () => {
               </p>
               <div className="googleBox" onClick={() => login()}>
                 <div className="googleicon">
-                  <img src="/images/google.png" alt="Google" />
+                  <Image src="/images/google.png" alt="Google" width={24} height={24} />
                 </div>
                 <div className="google">SignIn with Google</div>
               </div>

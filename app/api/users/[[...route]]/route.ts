@@ -28,9 +28,9 @@ export async function POST(req: NextRequest) {
       }
 
       const { email, name, picture } = userFromGoogle;
-      let profilePicUrl = picture || '/images/user.png';
+      const profilePicUrl = picture || '/images/user.png';
 
-      let user = await User.findOne({ email });
+      const user = await User.findOne({ email });
       if (!user) {
         const hashedPassword = await bcrypt.hash(name, 10);
         user = await User.create({ name, email, password: hashedPassword, profilePic: profilePicUrl });
@@ -71,7 +71,7 @@ export async function POST(req: NextRequest) {
       }
 
       const hashedPassword = await bcrypt.hash(password, 10);
-      let profilePicUrl = '/images/user.png';
+      const profilePicUrl = '/images/user.png';
 
       if (file) {
         const arrayBuffer = await file.arrayBuffer();

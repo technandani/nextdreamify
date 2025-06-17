@@ -38,7 +38,7 @@ export async function GET(req: NextRequest) {
   }
 }
 
-export async function GET_ALL(req: NextRequest) {
+export async function GET_ALL() {
   try {
     await connectMongoDB();
     const allUrls = await Image.find({});
