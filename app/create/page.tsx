@@ -45,6 +45,7 @@ const Create: React.FC = () => {
       toast.success("Image generated successfully!");
     } catch (err: unknown) {
       console.error("Error generating image:", err);
+
       let message =
         "Failed to generate image. Please check your connection and try again.";
 
@@ -54,6 +55,7 @@ const Create: React.FC = () => {
             "Image generation service is temporarily unavailable. Please try again later.";
         }
       }
+
       toast.error(message);
     } finally {
       setGenerating(false);
