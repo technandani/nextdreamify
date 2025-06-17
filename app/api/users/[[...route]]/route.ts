@@ -18,6 +18,7 @@ export async function POST(req: NextRequest) {
   const { pathname } = new URL(req.url);
   await connectMongoDB();
 
+  // ===== GOOGLE LOGIN =====
   if (pathname.includes('loginWithGoogle')) {
     try {
       const { rowtoken } = await req.json();
@@ -47,7 +48,7 @@ export async function POST(req: NextRequest) {
         success: true,
         message: 'Login successful.',
         token,
-        name: user.name, // Match React response
+        name: user.name,
       });
     } catch (error: unknown) {
       console.error('Error during Google login:', error);
@@ -55,6 +56,7 @@ export async function POST(req: NextRequest) {
     }
   }
 
+  // ===== REGISTER =====
   if (pathname.includes('register')) {
     try {
       const formData = await req.formData();
@@ -77,11 +79,13 @@ export async function POST(req: NextRequest) {
       }
 
       const hashedPassword = await bcrypt.hash(password, 10);
+      let profilePicUrl = '/images/user.png';
+
       if (file) {
         const arrayBuffer = await file.arrayBuffer();
         const buffer = Buffer.from(arrayBuffer);
 
-        const uploadResult:CloudinaryUploadResult  = await new Promise((resolve, reject) => {
+        const uploadResult: CloudinaryUploadResult = await new Promise((resolve, reject) => {
           const uploadStream = cloudinary.uploader.upload_stream(
             { folder: 'users/profile_pics', resource_type: 'image', secure: true },
             (error, result) => {
@@ -91,6 +95,7 @@ export async function POST(req: NextRequest) {
           );
           uploadStream.end(buffer);
         });
+
         profilePicUrl = uploadResult.secure_url;
       }
 
@@ -98,7 +103,11 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({
         success: true,
         message: 'User created successfully.',
-        data: { name: newUser.name, email: newUser.email, profilePic: newUser.profilePic },
+        data: {
+          name: newUser.name,
+          email: newUser.email,
+          profilePic: newUser.profilePic,
+        },
       });
     } catch (error: unknown) {
       console.error('Error during registration:', error);
@@ -106,6 +115,7 @@ export async function POST(req: NextRequest) {
     }
   }
 
+  // ===== LOGIN =====
   if (pathname.includes('login')) {
     try {
       const { email, password } = await req.json();
@@ -128,7 +138,7 @@ export async function POST(req: NextRequest) {
         success: true,
         message: 'Login successful.',
         token,
-        name: user.name, // Match React response
+        name: user.name,
       });
     } catch (error: unknown) {
       console.error('Error during login:', error);
