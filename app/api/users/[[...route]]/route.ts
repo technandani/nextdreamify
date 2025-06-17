@@ -6,6 +6,12 @@ import cloudinary from '../../../../lib/cloudinary';
 import connectMongoDB from '../../../../lib/mongodb';
 import User from '@models/user';
 
+type CloudinaryUploadResult = {
+  secure_url: string;
+  public_id: string;
+  [key: string]: any;
+};
+
 const secret = process.env.JWT_SECRET as string;
 
 export async function POST(req: NextRequest) {
@@ -28,9 +34,9 @@ export async function POST(req: NextRequest) {
       }
 
       const { email, name, picture } = userFromGoogle;
-      const profilePicUrl = picture || '/images/user.png';
+      let profilePicUrl = picture || '/images/user.png';
 
-      const user = await User.findOne({ email });
+      let user = await User.findOne({ email });
       if (!user) {
         const hashedPassword = await bcrypt.hash(name, 10);
         user = await User.create({ name, email, password: hashedPassword, profilePic: profilePicUrl });
@@ -71,22 +77,21 @@ export async function POST(req: NextRequest) {
       }
 
       const hashedPassword = await bcrypt.hash(password, 10);
-      const profilePicUrl = '/images/user.png';
-
       if (file) {
         const arrayBuffer = await file.arrayBuffer();
         const buffer = Buffer.from(arrayBuffer);
-        const uploadResult = await new Promise((resolve, reject) => {
+
+        const uploadResult:CloudinaryUploadResult  = await new Promise((resolve, reject) => {
           const uploadStream = cloudinary.uploader.upload_stream(
             { folder: 'users/profile_pics', resource_type: 'image', secure: true },
             (error, result) => {
               if (error) reject(error);
-              else resolve(result);
+              else resolve(result as CloudinaryUploadResult);
             }
           );
           uploadStream.end(buffer);
         });
-        profilePicUrl = (uploadResult as any).secure_url;
+        profilePicUrl = uploadResult.secure_url;
       }
 
       const newUser = await User.create({ name, email, password: hashedPassword, profilePic: profilePicUrl });
@@ -108,7 +113,7 @@ export async function POST(req: NextRequest) {
         return NextResponse.json({ success: false, message: 'All fields are required.' }, { status: 400 });
       }
 
-      const user = await User.findOne({ email });
+      let user = await User.findOne({ email });
       if (!user) {
         return NextResponse.json({ success: false, message: 'User not found. Please register first.' }, { status: 400 });
       }
