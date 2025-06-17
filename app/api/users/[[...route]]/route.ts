@@ -5,29 +5,15 @@ import axios from 'axios';
 import cloudinary from '../../../../lib/cloudinary';
 import connectMongoDB from '../../../../lib/mongodb';
 import User from '@models/user';
-// import { upload } from '../../../../lib/multer';
 
 const secret = process.env.JWT_SECRET as string;
 
-// Middleware to handle file uploads
-const runMiddleware = (req: NextRequest, fn: any) => {
-  return new Promise((resolve, reject) => {
-    fn(req, {
-      setHeader: () => {}, // No-op for NextResponse
-      end: () => {}, // No-op for NextResponse
-    }, (result: any) => {
-      if (result instanceof Error) return reject(result);
-      return resolve(result);
-    });
-  });
-};
-
 export async function POST(req: NextRequest) {
   const { pathname } = new URL(req.url);
+  await connectMongoDB();
 
   if (pathname.includes('loginWithGoogle')) {
     try {
-      await connectMongoDB();
       const { rowtoken } = await req.json();
       if (!rowtoken) {
         return NextResponse.json({ success: false, message: 'Token is missing' }, { status: 400 });
@@ -55,9 +41,9 @@ export async function POST(req: NextRequest) {
         success: true,
         message: 'Login successful.',
         token,
-        data: { email: user.email, name: user.name, profilePic: user.profilePic },
+        name: user.name, // Match React response
       });
-    } catch (error) {
+    } catch (error: any) {
       console.error('Error during Google login:', error);
       return NextResponse.json({ success: false, message: 'Error during login', error: error.message }, { status: 500 });
     }
@@ -65,7 +51,6 @@ export async function POST(req: NextRequest) {
 
   if (pathname.includes('register')) {
     try {
-      await connectMongoDB();
       const formData = await req.formData();
       const name = formData.get('name') as string;
       const email = formData.get('email') as string;
@@ -101,7 +86,7 @@ export async function POST(req: NextRequest) {
           );
           uploadStream.end(buffer);
         });
-        profilePicUrl = uploadResult.secure_url;
+        profilePicUrl = (uploadResult as any).secure_url;
       }
 
       const newUser = await User.create({ name, email, password: hashedPassword, profilePic: profilePicUrl });
@@ -110,7 +95,7 @@ export async function POST(req: NextRequest) {
         message: 'User created successfully.',
         data: { name: newUser.name, email: newUser.email, profilePic: newUser.profilePic },
       });
-    } catch (error) {
+    } catch (error: any) {
       console.error('Error during registration:', error);
       return NextResponse.json({ success: false, message: 'Error during registration.', error: error.message }, { status: 500 });
     }
@@ -118,7 +103,6 @@ export async function POST(req: NextRequest) {
 
   if (pathname.includes('login')) {
     try {
-      await connectMongoDB();
       const { email, password } = await req.json();
       if (!email || !password) {
         return NextResponse.json({ success: false, message: 'All fields are required.' }, { status: 400 });
@@ -139,9 +123,9 @@ export async function POST(req: NextRequest) {
         success: true,
         message: 'Login successful.',
         token,
-        data: { email: user.email, name: user.name, profilePic: user.profilePic },
+        name: user.name, // Match React response
       });
-    } catch (error) {
+    } catch (error: any) {
       console.error('Error during login:', error);
       return NextResponse.json({ success: false, message: error.message }, { status: 500 });
     }

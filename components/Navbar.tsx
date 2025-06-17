@@ -22,7 +22,7 @@ const Navbar = () => {
       </div>
       <div className="navRight">
         <div className="responsiveMenu" onClick={toggleMenu}>
-   <Image src="/images/menu.png" alt="menu" width={22} height={22} />
+          <Image src="/images/menu.png" alt="menu" width={22} height={22} />
         </div>
         <div className={`btns ${menuOpen ? "active" : ""}`}>
           <Link
@@ -31,7 +31,6 @@ const Navbar = () => {
             onClick={toggleMenu}
             style={{ display: menuOpen ? "block" : "none" }}
           >
-            {/* <img src="images/cut.png" alt="close menu" height={"30px"} /> */}
             <X size={40} className="text-white" />
           </Link>
           <Link
@@ -39,11 +38,11 @@ const Navbar = () => {
             id="genBtn"
             href="/create"
           >
-           <Image
+            <Image
               src="/images/paint5.png"
               alt="Paint stroke"
-              width={24} // h-6 is 1.5rem = 24px
-              height={24} // assuming a square image — you can change height if needed
+              width={24}
+              height={24}
               className="rounded-lg w-auto rotate-[315deg]"
             />
             Generate image

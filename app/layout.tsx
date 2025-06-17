@@ -2,8 +2,8 @@ import './globals.css';
 import '../styles/app.css';
 import { AuthProvider } from '../context/AuthContext';
 import { SearchProvider } from '../context/SearchContext';
-import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import { GoogleOAuthProvider } from '@react-oauth/google';
 
 export const metadata = {
   title: "Dreamify | AI Image Generator with Prompts",
@@ -41,12 +41,13 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
   return (
     <html lang="en">
       <body className='!bg-[#000]'>
+        <GoogleOAuthProvider clientId={process.env.NEXT_PUBLIC_GOOGLE_CLIENT_ID || ''}>
         <AuthProvider>
           <SearchProvider>
             {children}
-            <ToastContainer theme="dark" />
           </SearchProvider>
         </AuthProvider>
+        </GoogleOAuthProvider>
       </body>
     </html>
   );
