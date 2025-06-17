@@ -43,7 +43,7 @@ const Create: React.FC = () => {
       );
       setGeneratedImage(response.data.imageUrl);
       toast.success("Image generated successfully!");
-    } catch (err: any) {
+    } catch (err: unknown) {
       console.error("Error generating image:", err);
       const message =
         err.response?.status === 503
@@ -78,7 +78,7 @@ const Create: React.FC = () => {
         toast.success("Post created successfully!");
         setPrompt("");
         setGeneratedImage(null);
-      } catch (err: any) {
+      } catch (err: unknown) {
         console.error("Error posting image:", err);
         toast.error("Failed to post image. Please try again.");
       }

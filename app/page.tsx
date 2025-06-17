@@ -26,7 +26,7 @@ const Home: React.FC = () => {
       const data = Array.isArray(res.data) ? res.data : [];
       setPosts(data);
       setFilterPosts(data);
-    } catch (err: any) {
+    } catch (err: unknown) {
       console.error("Error fetching posts:", err);
       toast.error(
         err.response?.data?.message || "Failed to load posts. Please try again."

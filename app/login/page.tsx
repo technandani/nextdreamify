@@ -8,6 +8,7 @@ import { useRouter } from 'next/navigation';
 import 'react-toastify/dist/ReactToastify.css';
 import { useAuth } from '@/context/AuthContext';
 import { toast } from 'sonner';
+import Image from 'next/image';
 
 const Login: React.FC = () => {
   const [email, setEmail] = useState('');
@@ -39,7 +40,7 @@ const Login: React.FC = () => {
         } else {
           toast.error(message || 'Login failed. Please try again.');
         }
-      } catch (err: any) {
+      } catch (err: unknown) {
         toast.error(err.response?.data?.message || 'Something went wrong.');
       }
     },
@@ -72,7 +73,7 @@ const Login: React.FC = () => {
       } else {
         toast.error(message || 'Login failed. Please try again.');
       }
-    } catch (err: any) {
+    } catch (err: unknown) {
       toast.error(err.response?.data?.message || 'Something went wrong.');
     } finally {
       setLoading(false);
@@ -124,7 +125,7 @@ const Login: React.FC = () => {
             </p>
             <div className="googleBox" onClick={() => login()}>
               <div className="googleicon">
-                <img src="/images/google.png" alt="Google" />
+                <Image src="/images/google.png" alt="Google" width={24} height={24} />
               </div>
               <div className="google">SignIn with Google</div>
             </div>

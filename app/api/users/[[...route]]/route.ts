@@ -43,7 +43,7 @@ export async function POST(req: NextRequest) {
         token,
         name: user.name, // Match React response
       });
-    } catch (error: any) {
+    } catch (error: unknown) {
       console.error('Error during Google login:', error);
       return NextResponse.json({ success: false, message: 'Error during login', error: error.message }, { status: 500 });
     }
@@ -95,7 +95,7 @@ export async function POST(req: NextRequest) {
         message: 'User created successfully.',
         data: { name: newUser.name, email: newUser.email, profilePic: newUser.profilePic },
       });
-    } catch (error: any) {
+    } catch (error: unknown) {
       console.error('Error during registration:', error);
       return NextResponse.json({ success: false, message: 'Error during registration.', error: error.message }, { status: 500 });
     }
@@ -125,7 +125,7 @@ export async function POST(req: NextRequest) {
         token,
         name: user.name, // Match React response
       });
-    } catch (error: any) {
+    } catch (error: unknown) {
       console.error('Error during login:', error);
       return NextResponse.json({ success: false, message: error.message }, { status: 500 });
     }
