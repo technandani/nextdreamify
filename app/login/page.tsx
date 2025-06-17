@@ -20,7 +20,7 @@ const Login: React.FC = () => {
     if(isLoggedIn){
       router.push('/create');
     }
-  }, [isLoggedIn])
+  }, [isLoggedIn, router])
 
   const login = useGoogleLogin({
     onSuccess: async (tokenResponse) => {

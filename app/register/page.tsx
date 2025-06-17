@@ -22,7 +22,7 @@ const Register: React.FC = () => {
     if(isLoggedIn){
       router.push('/create');
     }
-  }, [isLoggedIn]);
+  }, [isLoggedIn, router]);
 
   const login = useGoogleLogin({
     onSuccess: async (tokenResponse) => {
@@ -43,7 +43,7 @@ const Register: React.FC = () => {
         } else {
           toast.error(message || 'Login failed. Please try again.');
         }
-      } catch (err: any) {
+      } catch (err: unknown) {
         toast.error(err.response?.data?.message || 'Something went wrong.');
       }
     },
@@ -82,7 +82,7 @@ const Register: React.FC = () => {
       setPassword('');
       setProfilePic(null);
       router.push('/login');
-    } catch (err: any) {
+    } catch (err: unknown) {
       toast.error(err.response?.data?.message || 'Something went wrong.');
     } finally {
       setLoading(false);
