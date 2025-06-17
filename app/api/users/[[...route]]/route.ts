@@ -9,7 +9,7 @@ import User from '@models/user';
 type CloudinaryUploadResult = {
   secure_url: string;
   public_id: string;
-  [key: string]: any;
+  [key: string]: unknown;
 };
 
 const secret = process.env.JWT_SECRET as string;
@@ -35,7 +35,7 @@ export async function POST(req: NextRequest) {
       }
 
       const { email, name, picture } = userFromGoogle;
-      let profilePicUrl = picture || '/images/user.png';
+      const profilePicUrl = picture || '/images/user.png';
 
       let user = await User.findOne({ email });
       if (!user) {
@@ -50,7 +50,8 @@ export async function POST(req: NextRequest) {
         token,
         name: user.name,
       });
-    } catch (error: unknown) {
+    } catch (err) {
+      const error = err instanceof Error ? err : new Error('Unknown error');
       console.error('Error during Google login:', error);
       return NextResponse.json({ success: false, message: 'Error during login', error: error.message }, { status: 500 });
     }
@@ -109,7 +110,8 @@ export async function POST(req: NextRequest) {
           profilePic: newUser.profilePic,
         },
       });
-    } catch (error: unknown) {
+    } catch (err) {
+      const error = err instanceof Error ? err : new Error('Unknown error');
       console.error('Error during registration:', error);
       return NextResponse.json({ success: false, message: 'Error during registration.', error: error.message }, { status: 500 });
     }
@@ -123,7 +125,7 @@ export async function POST(req: NextRequest) {
         return NextResponse.json({ success: false, message: 'All fields are required.' }, { status: 400 });
       }
 
-      let user = await User.findOne({ email });
+      const user = await User.findOne({ email });
       if (!user) {
         return NextResponse.json({ success: false, message: 'User not found. Please register first.' }, { status: 400 });
       }
@@ -140,7 +142,8 @@ export async function POST(req: NextRequest) {
         token,
         name: user.name,
       });
-    } catch (error: unknown) {
+    } catch (err) {
+      const error = err instanceof Error ? err : new Error('Unknown error');
       console.error('Error during login:', error);
       return NextResponse.json({ success: false, message: error.message }, { status: 500 });
     }
