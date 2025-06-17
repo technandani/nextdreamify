@@ -1,4 +1,5 @@
 'use client';
+
 import React, { useEffect, useState } from 'react';
 import axios, { AxiosError } from 'axios';
 import Cookies from 'js-cookie';
@@ -41,12 +42,8 @@ const Login: React.FC = () => {
           toast.error(message || 'Login failed. Please try again.');
         }
       } catch (err: unknown) {
-        const error = err as AxiosError;
-        toast.error(
-          error.response?.data && typeof error.response.data === 'object'
-            ? (error.response.data as any)?.message || 'Something went wrong.'
-            : 'Something went wrong.'
-        );
+        const error = err as AxiosError<{ message?: string }>;
+        toast.error(error.response?.data?.message || 'Something went wrong.');
       }
     },
     onError: () => toast.error('Google login failed. Please try again.'),
@@ -79,12 +76,8 @@ const Login: React.FC = () => {
         toast.error(message || 'Login failed. Please try again.');
       }
     } catch (err: unknown) {
-      const error = err as AxiosError;
-      toast.error(
-        error.response?.data && typeof error.response.data === 'object'
-          ? (error.response.data as any)?.message || 'Something went wrong.'
-          : 'Something went wrong.'
-      );
+      const error = err as AxiosError<{ message?: string }>;
+      toast.error(error.response?.data?.message || 'Something went wrong.');
     } finally {
       setLoading(false);
     }
