@@ -70,7 +70,7 @@ const Create: React.FC = () => {
           return;
         }
 
-        const response = await axios.post(
+        await axios.post(
           "/api/posts",
           { url: generatedImage, prompt },
           { headers: { Authorization: `Bearer ${token}` } }
@@ -105,7 +105,7 @@ const Create: React.FC = () => {
             <div className="title">
               <h2>Generate image with prompt</h2>
               <p>
-                Create stunning images from your ideas instantly with Dreamify's
+                Create stunning images from your ideas instantly with Dreamify&apos;s
                 powerful AI generator.
               </p>
             </div>
