@@ -1,11 +1,11 @@
 'use client';
 import React, { useEffect, useState } from 'react';
-import axios from 'axios';
+import axios, { AxiosError } from 'axios'; // ✅ Import AxiosError
 import { useGoogleLogin } from '@react-oauth/google';
 import Cookies from 'js-cookie';
 import Navbar from '../../components/Navbar';
 import { useRouter } from 'next/navigation';
-import { toast } from 'sonner'
+import { toast } from 'sonner';
 import { useAuth } from '@/context/AuthContext';
 import Image from 'next/image';
 
@@ -18,8 +18,8 @@ const Register: React.FC = () => {
   const router = useRouter();
   const { isLoggedIn } = useAuth();
 
-  useEffect(()=>{
-    if(isLoggedIn){
+  useEffect(() => {
+    if (isLoggedIn) {
       router.push('/create');
     }
   }, [isLoggedIn, router]);
@@ -30,7 +30,10 @@ const Register: React.FC = () => {
         const response = await axios.post(
           '/api/users/loginWithGoogle',
           { rowtoken: tokenResponse.access_token },
-          { headers: { 'Content-Type': 'application/json' }, withCredentials: true }
+          {
+            headers: { 'Content-Type': 'application/json' },
+            withCredentials: true,
+          }
         );
         const { success, token, name, message } = response.data;
         if (success) {
@@ -39,12 +42,14 @@ const Register: React.FC = () => {
           Cookies.set('uid', token, { expires: 5 });
           Cookies.set('loggedInUser', name, { expires: 5 });
           router.push('/create');
-          // Remove window.location.reload() to avoid full refresh
         } else {
           toast.error(message || 'Login failed. Please try again.');
         }
       } catch (err: unknown) {
-        toast.error(err.response?.data?.message || 'Something went wrong.');
+        const error = err as AxiosError<{ message?: string }>;
+        toast.error(
+          error.response?.data?.message || 'Something went wrong.'
+        );
       }
     },
     onError: () => toast.error('Google login failed. Please try again.'),
@@ -83,7 +88,10 @@ const Register: React.FC = () => {
       setProfilePic(null);
       router.push('/login');
     } catch (err: unknown) {
-      toast.error(err.response?.data?.message || 'Something went wrong.');
+      const error = err as AxiosError<{ message?: string }>;
+      toast.error(
+        error.response?.data?.message || 'Something went wrong.'
+      );
     } finally {
       setLoading(false);
     }
@@ -96,7 +104,10 @@ const Register: React.FC = () => {
         <form onSubmit={handleSubmit} encType="multipart/form-data">
           <div className="title">
             <h2>Welcome to Dreamify</h2>
-            <p>Sign up to Dreamify and turn your imagination into beautiful, unique images</p>
+            <p>
+              Sign up to Dreamify and turn your imagination into beautiful,
+              unique images
+            </p>
           </div>
           <div className="inputBox">
             <div className="authInput">
@@ -147,7 +158,12 @@ const Register: React.FC = () => {
               </p>
               <div className="googleBox" onClick={() => login()}>
                 <div className="googleicon">
-                  <Image src="/images/google.png" alt="Google" width={24} height={24} />
+                  <Image
+                    src="/images/google.png"
+                    alt="Google"
+                    width={24}
+                    height={24}
+                  />
                 </div>
                 <div className="google">SignIn with Google</div>
               </div>
