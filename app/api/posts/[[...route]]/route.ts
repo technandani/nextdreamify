@@ -33,7 +33,7 @@ export async function POST(req: NextRequest) {
     }
 
     const newPost = await Post.create({
-      user: decoded?._id,
+      user: decoded._id,
       url,
       prompt,
       visitingTime: [new Date()],
