@@ -1,6 +1,6 @@
 'use client';
 import React, { useEffect, useState } from 'react';
-import axios from 'axios';
+import axios, { AxiosError } from 'axios';
 import Cookies from 'js-cookie';
 import { useGoogleLogin } from '@react-oauth/google';
 import Navbar from '../../components/Navbar';
@@ -17,11 +17,11 @@ const Login: React.FC = () => {
   const router = useRouter();
   const { login: loginUser, isLoggedIn } = useAuth();
 
-  useEffect(()=>{
-    if(isLoggedIn){
+  useEffect(() => {
+    if (isLoggedIn) {
       router.push('/create');
     }
-  }, [isLoggedIn, router])
+  }, [isLoggedIn, router]);
 
   const login = useGoogleLogin({
     onSuccess: async (tokenResponse) => {
@@ -41,7 +41,12 @@ const Login: React.FC = () => {
           toast.error(message || 'Login failed. Please try again.');
         }
       } catch (err: unknown) {
-        toast.error(err.response?.data?.message || 'Something went wrong.');
+        const error = err as AxiosError;
+        toast.error(
+          error.response?.data && typeof error.response.data === 'object'
+            ? (error.response.data as any)?.message || 'Something went wrong.'
+            : 'Something went wrong.'
+        );
       }
     },
     onError: () => toast.error('Google login failed. Please try again.'),
@@ -65,7 +70,7 @@ const Login: React.FC = () => {
       if (success) {
         Cookies.set('uid', token, { expires: 5 });
         Cookies.set('loggedInUser', name, { expires: 5 });
-         loginUser();
+        loginUser();
         toast.success('Login successful!');
         setEmail('');
         setPassword('');
@@ -74,7 +79,12 @@ const Login: React.FC = () => {
         toast.error(message || 'Login failed. Please try again.');
       }
     } catch (err: unknown) {
-      toast.error(err.response?.data?.message || 'Something went wrong.');
+      const error = err as AxiosError;
+      toast.error(
+        error.response?.data && typeof error.response.data === 'object'
+          ? (error.response.data as any)?.message || 'Something went wrong.'
+          : 'Something went wrong.'
+      );
     } finally {
       setLoading(false);
     }
