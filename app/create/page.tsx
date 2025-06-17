@@ -80,7 +80,12 @@ const Create: React.FC = () => {
         setGeneratedImage(null);
       } catch (err: unknown) {
         console.error("Error posting image:", err);
-        toast.error("Failed to post image. Please try again.");
+        const message = axios.isAxiosError(err)
+          ? "Failed to post image: " +
+            (err.response?.data?.message || err.message)
+          : "Failed to post image. Please try again.";
+
+        toast.error(message);
       }
     } else {
       setShowLoginModal(true);
@@ -105,8 +110,8 @@ const Create: React.FC = () => {
             <div className="title">
               <h2>Generate image with prompt</h2>
               <p>
-                Create stunning images from your ideas instantly with Dreamify&apos;s
-                powerful AI generator.
+                Create stunning images from your ideas instantly with
+                Dreamify&apos;s powerful AI generator.
               </p>
             </div>
             <form onSubmit={handleSubmit}>
