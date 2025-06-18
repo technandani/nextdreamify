@@ -16,7 +16,7 @@ const Register: React.FC = () => {
   const [profilePic, setProfilePic] = useState<File | null>(null);
   const [loading, setLoading] = useState(false);
   const router = useRouter();
-  const { isLoggedIn } = useAuth();
+  const { isLoggedIn, login: loginUser, } = useAuth();
 
   useEffect(() => {
     if (isLoggedIn) {
@@ -37,8 +37,7 @@ const Register: React.FC = () => {
         );
         const { success, token, name, message } = response.data;
         if (success) {
-          localStorage.setItem('uid', token);
-          localStorage.setItem('loggedInUser', name);
+         loginUser();
           Cookies.set('uid', token, { expires: 5 });
           Cookies.set('loggedInUser', name, { expires: 5 });
           router.push('/create');

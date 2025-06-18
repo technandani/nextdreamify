@@ -36,6 +36,7 @@ const Login: React.FC = () => {
         if (success) {
           Cookies.set('uid', token, { expires: 5 });
           Cookies.set('loggedInUser', name, { expires: 5 });
+          loginUser();
           toast.success('Login successful!');
           router.push('/create');
         } else {
