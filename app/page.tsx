@@ -20,27 +20,30 @@ const Home: React.FC = () => {
   const [loading, setLoading] = useState(false);
   const { search, setSearch } = useSearch();
 
-
-const fetchImages = async () => {
-  setLoading(true);
-  try {
-    const res = await axios.get("/api/posts");
-    const data = Array.isArray(res.data) ? res.data : [];
-    setPosts(data);
-    setFilterPosts(data);
-  } catch (err: unknown) {
-    console.error("Error fetching posts:", err);
-    const error = err as AxiosError<{ message?: string }>;
-    toast.error(
-      error.response?.data?.message || "Failed to load posts. Please try again."
-    );
-    setPosts([]);
-    setFilterPosts([]);
-  } finally {
-    setLoading(false);
-  }
-};
-
+  const fetchImages = async () => {
+    setLoading(true);
+    try {
+      const res = await axios.get("/api/posts", { timeout: 10000 });
+      const data = Array.isArray(res.data) ? res.data : [];
+      console.log("Fetched posts:", data);
+      setPosts(data);
+      setFilterPosts(data);
+    } catch (err: unknown) {
+      console.error("Error fetching posts:", {
+        message: err instanceof Error ? err.message : "Unknown error",
+        stack: err instanceof Error ? err.stack : undefined,
+      });
+      const error = err as AxiosError<{ message?: string }>;
+      toast.error(
+        error.response?.data?.message ||
+          "Failed to load posts. Please try again."
+      );
+      setPosts([]);
+      setFilterPosts([]);
+    } finally {
+      setLoading(false);
+    }
+  };
 
   useEffect(() => {
     fetchImages();
@@ -56,6 +59,7 @@ const fetchImages = async () => {
         post?.prompt?.toLowerCase().includes(search.toLowerCase()) ||
         post?.user?.name?.toLowerCase().includes(search.toLowerCase())
     );
+    console.log("Filtered posts:", filtered);
     setFilterPosts(filtered);
   }, [posts, search]);
 
@@ -80,32 +84,30 @@ const fetchImages = async () => {
             />
           </div>
         </div>
-        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-5">
+        <div className="">
           {loading ? (
             <div className="divLoader col-span-full flex justify-center pt-[25%] w-[98vw]">
               <Loader />
             </div>
           ) : filterPosts.length > 0 ? (
-            filterPosts.map((post, index) => (
-              <ImageCard key={index} post={post} />
-            ))
+            <div className="masonry">
+              {filterPosts.map((post, index) => (
+                <div key={post._id || index} className="masonry-item">
+                  <ImageCard post={post} />
+                </div>
+              ))}
+            </div>
           ) : (
             <div className="col-span-full flex flex-col items-center justify-center text-center w-[98vw]">
-              {/* <img
-                src="https://res.cloudinary.com/dpmengi5q/image/upload/v1735578462/noData_2_ohoj6z.png"
-                alt="No Data"
-                className="w-full max-w-xs h-auto"
-              /> */}
               <Image
                 src="https://res.cloudinary.com/dpmengi5q/image/upload/v1735578462/noData_2_ohoj6z.png"
                 alt="No Data"
-                width={300} // or appropriate width in pixels
-                height={200} // adjust based on aspect ratio of your image
+                width={300}
+                height={200}
                 className="w-full max-w-xs h-auto"
               />
               <h3 className="text-white mt-4 font-semibold">
-                No results! Press &apos;Generate Image&apos; to craft your
-                image.
+                No results! Press Generate Image to craft your image.
               </h3>
               <Link
                 href="/create"

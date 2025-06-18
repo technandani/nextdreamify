@@ -10,13 +10,30 @@ interface ImageCardProps {
   post: Post;
 }
 
+const isValidUrl = (url: string | undefined): boolean => {
+  if (!url) return false;
+  try {
+    new URL(url);
+    return true;
+  } catch {
+    return false;
+  }
+};
+
 const ImageCard: React.FC<ImageCardProps> = ({ post }) => {
-  const secureUrl = post.url?.startsWith("http://")
-    ? post.url.replace("http://", "https://")
-    : post.url;
-  const profilePicUrl = post.user?.profilePic?.startsWith("http://")
-    ? post.user.profilePic.replace("http://", "https://")
-    : post.user?.profilePic || "images/user.png";
+  const secureUrl = (() => {
+    if (!isValidUrl(post.url)) return "/images/placeholder.png";
+    return post.url.startsWith("http://")
+      ? post.url.replace("http://", "https://")
+      : post.url;
+  })();
+
+  const profilePicUrl = (() => {
+    if (!isValidUrl(post.user?.profilePic)) return "/images/user.png";
+    return post.user.profilePic.startsWith("http://")
+      ? post.user.profilePic.replace("http://", "https://")
+      : post.user.profilePic;
+  })();
 
   return (
     <div className="relative rounded-[15px] overflow-hidden group cursor-pointer transition-transform hover:scale-105">
@@ -24,9 +41,10 @@ const ImageCard: React.FC<ImageCardProps> = ({ post }) => {
         src={secureUrl}
         alt="Generated image"
         className="w-full rounded-[15px]"
+        placeholderSrc="/images/placeholder.png"
       />
       <div className="absolute inset-0 opacity-0 group-hover:opacity-100 backdrop-blur-md bg-[#253b5070] transition-opacity p-5 flex flex-col justify-end gap-2">
-        <p className="!text-sm md:text-base">{post.prompt}</p>
+        <p className="!text-sm md:text-base">{post.prompt || "No prompt available"}</p>
         <div className="flex justify-between w-full">
           <div className="flex items-center gap-2 text-sm md:text-base">
             <div className="h-6 w-6 rounded-full overflow-hidden bg-black flex items-center justify-center">
@@ -40,7 +58,10 @@ const ImageCard: React.FC<ImageCardProps> = ({ post }) => {
             </div>
             <div className="!text-sm">{post.user?.name || "Unknown"}</div>
           </div>
-          <button onClick={() => FileSaver.saveAs(post.url, "download.jpg")}>
+          <button
+            onClick={() => isValidUrl(post.url) && FileSaver.saveAs(post.url, "download.jpg")}
+            disabled={!isValidUrl(post.url)}
+          >
             <ArrowDownToLine size={22} absoluteStrokeWidth />
           </button>
         </div>

@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import jwt, { JwtPayload } from "jsonwebtoken";
 import connectMongoDB from "@/lib/mongodb";
 import Post from "@models/post";
+import User from "@models/user";
 
 const secret = process.env.JWT_SECRET as string;
 
@@ -43,6 +44,14 @@ export async function POST(req: NextRequest) {
       );
     }
 
+    const user = await User.findById(decoded._id);
+    if (!user) {
+      return NextResponse.json(
+        { success: false, message: "User not found." },
+        { status: 404 }
+      );
+    }
+
     const newPost = await Post.create({
       user: decoded._id,
       url,
@@ -56,13 +65,16 @@ export async function POST(req: NextRequest) {
       post: newPost,
     });
   } catch (error) {
-    console.error("Server error:", error);
+    console.error("POST /api/posts error:", {
+      message: error instanceof Error ? error.message : "Unknown error",
+      stack: error instanceof Error ? error.stack : undefined,
+    });
     return NextResponse.json(
       {
         success: false,
         message:
           process.env.NODE_ENV === "development"
-            ? (error as Error).message
+            ? error instanceof Error ? error.message : "Internal server error."
             : "Internal server error.",
       },
       { status: 500 }
@@ -73,12 +85,22 @@ export async function POST(req: NextRequest) {
 export async function GET() {
   try {
     await connectMongoDB();
+    console.log("Fetching posts from MongoDB...");
     const posts = await Post.find({})
       .sort({ _id: -1 })
-      .populate("user", "name profilePic");
+      .populate({
+        path: "user",
+        select: "name profilePic",
+        model: User,
+      })
+      .lean();
+    console.log(`Fetched ${posts.length} posts.`);
     return NextResponse.json(posts);
   } catch (error) {
-    console.error("Server error:", error);
+    console.error("GET /api/posts error:", {
+      message: error instanceof Error ? error.message : "Unknown error",
+      stack: error instanceof Error ? error.stack : undefined,
+    });
     const message =
       error instanceof Error ? error.message : "Internal server error.";
     return NextResponse.json(

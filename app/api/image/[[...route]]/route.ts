@@ -9,24 +9,32 @@ export async function GET(req: NextRequest) {
   const { searchParams } = new URL(req.url);
   const prompt = searchParams.get('prompt');
   const getAll = searchParams.get('all') === 'true';
+  const width = searchParams.get('width') || '800';
+  const height = searchParams.get('height') || '800';
 
   try {
     await connectMongoDB();
 
     // === Fetch All Images ===
     if (getAll) {
-      const allImages = await Image.find({});
+      const allImages = await Image.find({}).lean();
+      console.log(`Fetched ${allImages.length} images.`);
       return NextResponse.json(allImages);
     }
 
     // === Generate and Upload Image ===
-    const finalPrompt = prompt || 'default prompt';
-    console.log(`Generating image for prompt: "${finalPrompt}"`);
+    if (!prompt) {
+      return NextResponse.json({ message: 'Prompt is required' }, { status: 400 });
+    }
 
-    const pollinationUrl = `https://image.pollinations.ai/prompt/${encodeURIComponent(finalPrompt)}?width=800&height=800&seed=42&model=turbo&nologo=true&enhance=false`;
+    const finalPrompt = prompt;
+    console.log(`Generating image for prompt: "${finalPrompt}" with width: ${width}, height: ${height}`);
+
+    const pollinationUrl = `https://image.pollinations.ai/prompt/${encodeURIComponent(finalPrompt)}?width=${width}&height=${height}&seed=42&model=turbo&nologo=true&enhance=false`;
     const response = await axios.get(pollinationUrl, { responseType: 'arraybuffer' });
 
     if (response.status !== 200) {
+      console.error('Pollinations API error:', response.status, response.statusText);
       return NextResponse.json({ message: 'Failed to fetch image from Pollinations' }, { status: 500 });
     }
 
@@ -46,7 +54,10 @@ export async function GET(req: NextRequest) {
 
   } catch (err) {
     const error = err instanceof Error ? err : new Error('Unknown error');
-    console.error('Error in GET /image:', error);
+    console.error('GET /api/image error:', {
+      message: error.message,
+      stack: error.stack,
+    });
     return NextResponse.json({ message: 'Error processing request', error: error.message }, { status: 500 });
   }
 }

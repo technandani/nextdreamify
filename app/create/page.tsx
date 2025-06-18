@@ -11,9 +11,21 @@ import Image from "next/image";
 const Create: React.FC = () => {
   const { isLoggedIn } = useAuth();
   const [prompt, setPrompt] = useState("");
+  const [width, setWidth] = useState("800");
+  const [height, setHeight] = useState("800");
   const [generating, setGenerating] = useState(false);
   const [generatedImage, setGeneratedImage] = useState<string | null>(null);
   const [showLoginModal, setShowLoginModal] = useState(false);
+
+  const dimensionOptions = [
+    "512",
+    "640",
+    "800",
+    "1024",
+    "1280",
+    "1536",
+    "2048",
+  ];
 
   const getCookie = (name: string): string | null => {
     const value = `; ${document.cookie}`;
@@ -26,6 +38,14 @@ const Create: React.FC = () => {
     setPrompt(e.target.value);
   };
 
+  const handleWidthChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
+    setWidth(e.target.value);
+  };
+
+  const handleHeightChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
+    setHeight(e.target.value);
+  };
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!prompt) {
@@ -36,7 +56,9 @@ const Create: React.FC = () => {
     setGenerating(true);
     try {
       const response = await axios.get(
-        `/api/image?prompt=${encodeURIComponent(prompt)}`,
+        `/api/image?prompt=${encodeURIComponent(
+          prompt
+        )}&width=${width}&height=${height}`,
         {
           timeout: 30000,
         }
@@ -45,7 +67,6 @@ const Create: React.FC = () => {
       toast.success("Image generated successfully!");
     } catch (err: unknown) {
       console.error("Error generating image:", err);
-
       let message =
         "Failed to generate image. Please check your connection and try again.";
 
@@ -85,6 +106,8 @@ const Create: React.FC = () => {
         toast.success("Post created successfully!");
         setPrompt("");
         setGeneratedImage(null);
+        setWidth("800");
+        setHeight("800");
       } catch (err: unknown) {
         console.error("Error posting image:", err);
         const message = axios.isAxiosError(err)
@@ -113,12 +136,12 @@ const Create: React.FC = () => {
       <Navbar />
       <div className="flex mx-auto p-[30px]">
         <div className="flex items-center justify-evenly w-full gap-[30px] max-[699px]:flex-col-reverse">
-          <div className="w-[90vmin] p-[15px] flex flex-col gap-[30px] max-[699px]:w-[92vmin] max-[699px]:p-0">
-            <div className="title">
-              <h2>Generate image with prompt</h2>
-              <p>
-                Create stunning images from your ideas instantly with
-                Dreamify&apos;s powerful AI generator.
+          <div className="w-[90vmin] flex flex-col gap-2 max-[699px]:w-[92vmin] max-[699px]:p-0">
+            <div className="flex flex-col gap-2 mb-4">
+              <h2 className="text-3xl font-bold">Generate image with prompt</h2>
+              <p className="text-gray-300 text-lg">
+                Create stunning images from your ideas instantly with Dreamify s
+                powerful AI generator.
               </p>
             </div>
             <form onSubmit={handleSubmit}>
@@ -129,16 +152,53 @@ const Create: React.FC = () => {
                     value={prompt}
                     onChange={handlePromptChange}
                     className="border border-white h-[30vmin] w-full rounded-lg bg-transparent px-3 py-3"
+                    placeholder="Enter your image prompt..."
                   ></textarea>
                 </div>
-                <div className="CreatePostBtns">
+                <div className="flex gap-4">
+                  <div className="flex-1">
+                    <div className="inputTitle">Width</div>
+                    <select
+                      value={width}
+                      onChange={handleWidthChange}
+                      className="border border-white w-full rounded-lg bg-transparent px-3 py-3"
+                    >
+                      {dimensionOptions.map((option) => (
+                        <option
+                          key={option}
+                          value={option}
+                          className="bg-[#253b50]"
+                        >
+                          {option}px
+                        </option>
+                      ))}
+                    </select>
+                  </div>
+                  <div className="flex-1">
+                    <div className="inputTitle">Height</div>
+                    <select
+                      value={height}
+                      onChange={handleHeightChange}
+                      className="border border-white w-full rounded-lg bg-transparent px-3 py-3"
+                    >
+                      {dimensionOptions.map((option) => (
+                        <option
+                          key={option}
+                          value={option}
+                          className="bg-[#253b50]"
+                        >
+                          {option}px
+                        </option>
+                      ))}
+                    </select>
+                  </div>
+                </div>
+                <div className="CreatePostBtns flex gap-4">
                   <button
                     type="submit"
-                    className="CreatePostBtn bg-[#253b50] rounded-lg"
+                    className="CreatePostBtn text-xl bg-[#253b50] rounded-lg flex items-center gap-2 px-4 py-2"
                     disabled={generating}
                   >
-                    {/* <img src="/images/390.png" alt="Generate" className='h-[40px]' /> */}
-
                     <Image
                       src="/images/390.png"
                       alt="Generate"
@@ -146,19 +206,13 @@ const Create: React.FC = () => {
                       height={40}
                       className="h-[40px] w-auto"
                     />
-
                     {generating ? "Generating..." : "Generate Image"}
                   </button>
                   <button
                     type="button"
-                    className="CreatePostBtn bg-orange-400 rounded-lg"
+                    className="CreatePostBtn text-xl bg-orange-400 rounded-lg flex items-center gap-2 px-4 py-2"
                     onClick={handlePostImage}
                   >
-                    {/* <img
-                      src="/images/stars.png"
-                      alt="Post"
-                      className="h-[40px]"
-                    /> */}
                     <Image
                       src="/images/stars.png"
                       alt="Post"
@@ -173,21 +227,17 @@ const Create: React.FC = () => {
             </form>
           </div>
           <div className="w-[75vmin] rounded-[20px] max-[699px]:w-full">
-            <div className="createdImg p-2 rounded-lg">
+            <div className="createdImg p-2 rounded-lg min-w-2/2">
               {generatedImage ? (
                 <div className="downloadBox">
-                  {/* <img
-                    src={generatedImage}
-                    alt="Generated"
-                    className="rounded-lg w-full z-10"
-                  /> */}
                   <Image
                     src={generatedImage}
                     alt="Generated"
-                    width={300}
-                    height={200}
-                    className="rounded-lg w-full z-10"
+                    width={parseInt(width)}
+                    height={parseInt(height)}
+                    className="rounded-lg max-w-full max-h-[80vh] object-contain mx-auto"
                   />
+
                   <div
                     className="downloadBtn cursor-pointer"
                     onClick={() =>
@@ -195,18 +245,6 @@ const Create: React.FC = () => {
                     }
                   >
                     <div className="relative flex items-center justify-center">
-                      {/* <img
-                        src="/images/download.png"
-                        alt="Download"
-                        className="z-50 "
-                        style={{
-                          height: "25px",
-                          width: "auto",
-                          position: "absolute",
-                          top: "-50px",
-                          right: "30px",
-                        }}
-                      /> */}
                       <Image
                         src="/images/download.png"
                         alt="Download"
@@ -218,8 +256,7 @@ const Create: React.FC = () => {
                   </div>
                 </div>
               ) : (
-                <div className="downloadBox">
-                  {/* <img src='https://res.cloudinary.com/dpmengi5q/image/upload/v1735566750/image_2_cmhkfh.png' alt="Generated" className='rounded-lg w-full z-10' /> */}
+                <div className="downloadBox min-w-full]">
                   <div className="downloadBtn flex items-center justify-center h-[65vmin] rounded-lg bg-[#253b50] text-lg">
                     Please generate an image to see Image!
                   </div>
