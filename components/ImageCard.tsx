@@ -44,10 +44,10 @@ const ImageCard: React.FC<ImageCardProps> = ({ post }) => {
         placeholderSrc="/images/placeholder.png"
       />
       <div className="absolute inset-0 opacity-0 group-hover:opacity-100 backdrop-blur-md bg-[#253b5070] transition-opacity p-5 flex flex-col justify-end gap-2">
-        <p className="!text-sm md:text-base">{post.prompt || "No prompt available"}</p>
+        <p className="!text-xs md:text-base">{post.prompt || "No prompt available"}</p>
         <div className="flex justify-between w-full">
           <div className="flex items-center gap-2 text-sm md:text-base">
-            <div className="h-6 w-6 rounded-full overflow-hidden bg-black flex items-center justify-center">
+            <div className="h-5 w-5 rounded-full overflow-hidden bg-black flex items-center justify-center">
               <Image
                 src={profilePicUrl}
                 alt="Author"
@@ -62,7 +62,7 @@ const ImageCard: React.FC<ImageCardProps> = ({ post }) => {
             onClick={() => isValidUrl(post.url) && FileSaver.saveAs(post.url, "download.jpg")}
             disabled={!isValidUrl(post.url)}
           >
-            <ArrowDownToLine size={22} absoluteStrokeWidth />
+            <ArrowDownToLine size={20} absoluteStrokeWidth />
           </button>
         </div>
       </div>

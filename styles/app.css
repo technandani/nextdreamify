@@ -465,7 +465,7 @@ h2 div {
 
 
 .masonry {
-  column-count: 4;
+  column-count: 5;
   column-gap: 1rem;
   padding: 1rem;
 }

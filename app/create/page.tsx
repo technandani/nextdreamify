@@ -64,7 +64,7 @@ const Create: React.FC = () => {
         }
       );
       setGeneratedImage(response.data.imageUrl);
-      toast.success("Image generated successfully!");
+      // toast.success("Image generated successfully!");
     } catch (err: unknown) {
       console.error("Error generating image:", err);
       let message =
@@ -132,7 +132,7 @@ const Create: React.FC = () => {
 
   return (
     <>
-      <Toaster richColors position="top-right" theme="dark" />
+      <Toaster richColors position="bottom-right" theme="dark" />
       <Navbar />
       <div className="flex mx-auto p-[30px]">
         <div className="flex items-center justify-evenly w-full gap-[30px] max-[699px]:flex-col-reverse">
