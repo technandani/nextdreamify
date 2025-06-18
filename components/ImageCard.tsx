@@ -30,13 +30,13 @@ const ImageCard: React.FC<ImageCardProps> = ({ post }) => {
         <div className="flex justify-between w-full">
           <div className="flex items-center gap-2 text-sm md:text-base">
             <div className="h-6 w-6 rounded-full overflow-hidden bg-black flex items-center justify-center">
-                <Image
-                  src={profilePicUrl}
-                  alt="Author"
-                  width={25}
-                  height={25}
-                  className="h-full max-w-[25px] object-cover"
-                />
+              <Image
+                src={profilePicUrl}
+                alt="Author"
+                width={25}
+                height={25}
+                className="h-full max-w-[25px] object-cover"
+              />
             </div>
             <div className="!text-sm">{post.user?.name || "Unknown"}</div>
           </div>
