@@ -35,7 +35,7 @@ header {
   align-items: center;
   justify-content: space-between;
   position: relative;
-  box-shadow: rgba(0, 0, 0, 0.45) 0px 5px 15px -5px;
+  box-shadow: #446584 0px 5px 15px -5px;
 }
 
 .logo {
@@ -328,38 +328,38 @@ h2 div {
 }
 
 .loginContainer form {
-  width: 65vmin;
-  box-shadow: 0 0 2px #253b50;
-  border-radius: 20px;
-  display: flex;
-  flex-direction: column;
-  gap: 25px;
-  padding: 30px;
+  /* width: 65vmin; */
+  box-shadow: 0 0 2px #cee3f7;
+  /* border-radius: 20px; */
+  /* display: flex;
+  flex-direction: column; */
+  /* gap: 25px; */
+  /* padding: 30px; */
 }
 
 .authInput {
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
+  /* display: flex;
+  flex-direction: column; */
+  /* gap: 10px; */
 }
 
 .authInput input,
 .authInput button {
-  width: 100%;
-  height: 38px;
+  /* width: 100%;
+  height: 38px; */
   background-color: #0c1821;
   box-shadow: 0 0 3px rgb(41, 74, 105);
-  border-radius: 10px;
+  /* border-radius: 10px; */
 }
 
 .authInput input{
-  padding-left: 15px;
-  width: 97%;
+  /* padding-left: 15px;
+  width: 97%; */
 }
 
 .authInput button {
-  background-color: #253b50;
-  font-size: 22px;
+  /* background-color: #253b50;
+  font-size: 22px; */
 }
 
 .authInput button:hover {
@@ -372,16 +372,16 @@ h2 div {
   gap: 20px;
 }
 
-.forgotBox {
+/* .forgotBox {
   display: flex;
   flex-direction: column;
   align-items: center;
   gap: 20px;
   justify-content: center;
   margin: 5px;
-}
+} */
 
-.forgotBox p{
+/* .forgotBox p{
   display: flex;
 }
 
@@ -390,12 +390,12 @@ h2 div {
   padding: 10px 20px;
   box-shadow: 0 0 3px #253b50;
   border-radius: 20px;
-}
+} */
 
-.forgotBox span {
+/* .forgotBox span {
   color: gold;
   font-weight: 600;
-}
+} */
 
 .googleBox {
   display: flex;
