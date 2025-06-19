@@ -2,10 +2,9 @@
 import React, { useState } from "react";
 import { useAuth } from "../../context/AuthContext";
 import axios from "axios";
-import dynamic from "next/dynamic";
-const Navbar = dynamic(() => import("../../components/Navbar"), { ssr: false });
-const Modal = dynamic(() => import("../../components/Modal"), { ssr: false });
+import Navbar from "../../components/Navbar";
 import FileSaver from "file-saver";
+import Modal from "../../components/Modal";
 import { Toaster, toast } from "sonner";
 import Image from "next/image";
 
@@ -204,7 +203,6 @@ const Create: React.FC = () => {
                       alt="Generate"
                       width={40}
                       height={40}
-                      loading="lazy"
                       className="h-[40px] w-auto"
                     />
                     {generating ? "Generating..." : "Generate Image"}
@@ -219,7 +217,6 @@ const Create: React.FC = () => {
                       alt="Post"
                       width={40}
                       height={40}
-                      loading="lazy"
                       className="h-[40px] w-auto"
                     />
                     Post Image
