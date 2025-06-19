@@ -4,6 +4,7 @@ import { AuthProvider } from '../context/AuthContext';
 import { SearchProvider } from '../context/SearchContext';
 import 'react-toastify/dist/ReactToastify.css';
 import { GoogleOAuthProvider } from '@react-oauth/google';
+import { GoogleAnalytics } from "@next/third-parties/google";
 
 export const metadata = {
   title: "Dreamify | AI Image Generator with Prompts",
@@ -45,6 +46,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         <AuthProvider>
           <SearchProvider>
             {children}
+            <GoogleAnalytics gaId={process.env.NEXT_PUBLIC_GOOGLE_ANALYTICS_ID}/>
           </SearchProvider>
         </AuthProvider>
         </GoogleOAuthProvider>

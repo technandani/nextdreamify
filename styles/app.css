@@ -145,10 +145,10 @@ background: linear-gradient(90deg, rgb(224, 134, 0) 54%, rgb(236, 154, 1) 80%, r
   text-align: center;
 }
 
-h2 div {
+/* h2 div {
   color: #1b2a41;
   margin: 10px;
-}
+} */
 
 .searchBox {
   height: 45px;

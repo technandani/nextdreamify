@@ -160,7 +160,7 @@ const Register: React.FC = () => {
             </div>
             <div className="">
               {loading ? (
-                <p>Loading...</p>
+                <button className="bg-[#253b50] w-full text-white px-4 py-2 rounded">Loading...</butt>
               ) : (
                 <button
                   className="bg-[#253b50] w-full text-white px-4 py-2 rounded"

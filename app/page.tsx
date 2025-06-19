@@ -71,7 +71,7 @@ const Home: React.FC = () => {
         <div className="searchContainer text-center mb-8">
           <h2 className="text-2xl font-bold text-white">
             Explore popular posts in this community
-            <div className="text-gray-400">@ created with AI @</div>
+            <div className="text-[#2f567a]">@ created with AI @</div>
           </h2>
           <div className="searchBox flex items-center mt-4 bg-gray-700 rounded-lg p-2">
             <Search />
@@ -86,7 +86,7 @@ const Home: React.FC = () => {
         </div>
         <div className="">
           {loading ? (
-            <div className="divLoader col-span-full flex justify-center pt-[25%] w-[98vw]">
+            <div className="flex justify-center items-center min-h-[50vh]">
               <Loader />
             </div>
           ) : filterPosts.length > 0 ? (
