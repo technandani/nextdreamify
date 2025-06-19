@@ -5,7 +5,7 @@ import { useGoogleLogin } from "@react-oauth/google";
 import Cookies from "js-cookie";
 import Navbar from "../../components/Navbar";
 import { useRouter } from "next/navigation";
-import { toast } from "sonner";
+import { toast, Toaster } from "sonner";
 import { useAuth } from "@/context/AuthContext";
 import Image from "next/image";
 import Link from "next/link";
@@ -160,7 +160,7 @@ const Register: React.FC = () => {
             </div>
             <div className="">
               {loading ? (
-                <button className="bg-[#253b50] w-full text-white px-4 py-2 rounded">Loading...</butt>
+                <button className="bg-[#253b50] w-full text-white px-4 py-2 rounded">Loading...</button>
               ) : (
                 <button
                   className="bg-[#253b50] w-full text-white px-4 py-2 rounded"
@@ -196,6 +196,7 @@ const Register: React.FC = () => {
           </div>
         </form>
       </div>
+      <Toaster richColors position="bottom-right" theme="dark" />
     </>
   );
 };
