@@ -102,6 +102,8 @@ const Home: React.FC = () => {
               <Image
                 src="https://res.cloudinary.com/dpmengi5q/image/upload/v1735578462/noData_2_ohoj6z.png"
                 alt="No Data"
+                loading="lazy"
+                quality={70}
                 width={300}
                 height={200}
                 className="w-full max-w-xs h-auto"
