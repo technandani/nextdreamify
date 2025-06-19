@@ -53,6 +53,7 @@ const ImageCard: React.FC<ImageCardProps> = ({ post }) => {
                 alt="Author"
                 width={25}
                 height={25}
+                loading="lazy"
                 className="h-full max-w-[25px] object-cover"
               />
             </div>

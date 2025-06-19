@@ -19,10 +19,11 @@ const Modal: React.FC<ModalProps> = ({ onClose, onLoginRedirect }) => {
           <X size={24} />
         </button>
         <Image
-          src="/images/rocket.png" // ✅ Add leading slash
+          src="/images/rocket.png"
           alt="Rocket"
           width={120}
           height={150}
+          loading="lazy"
           className="absolute -top-12 left-1/2 transform -translate-x-1/2 h-[150px] !w-auto"
         />
         <div className="flex flex-col items-center justify-center">

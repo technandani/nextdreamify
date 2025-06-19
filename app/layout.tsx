@@ -2,7 +2,6 @@ import './globals.css';
 import '../styles/app.css';
 import { AuthProvider } from '../context/AuthContext';
 import { SearchProvider } from '../context/SearchContext';
-import 'react-toastify/dist/ReactToastify.css';
 import { GoogleOAuthProvider } from '@react-oauth/google';
 import { GoogleAnalytics } from "@next/third-parties/google";
 

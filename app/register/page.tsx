@@ -1,9 +1,10 @@
 "use client";
 import React, { useEffect, useState } from "react";
-import axios, { AxiosError } from "axios"; // ✅ Import AxiosError
+import axios, { AxiosError } from "axios";
 import { useGoogleLogin } from "@react-oauth/google";
 import Cookies from "js-cookie";
-import Navbar from "../../components/Navbar";
+import dynamic from "next/dynamic";
+const Navbar = dynamic(() => import("../../components/Navbar"), { ssr: false });
 import { useRouter } from "next/navigation";
 import { toast, Toaster } from "sonner";
 import { useAuth } from "@/context/AuthContext";

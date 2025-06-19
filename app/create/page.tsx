@@ -2,9 +2,10 @@
 import React, { useState } from "react";
 import { useAuth } from "../../context/AuthContext";
 import axios from "axios";
-import Navbar from "../../components/Navbar";
+import dynamic from "next/dynamic";
+const Navbar = dynamic(() => import("../../components/Navbar"), { ssr: false });
+const Modal = dynamic(() => import("../../components/Modal"), { ssr: false });
 import FileSaver from "file-saver";
-import Modal from "../../components/Modal";
 import { Toaster, toast } from "sonner";
 import Image from "next/image";
 
@@ -132,7 +133,6 @@ const Create: React.FC = () => {
 
   return (
     <>
-      <Toaster richColors position="bottom-right" theme="dark" />
       <Navbar />
       <div className="flex mx-auto p-[30px]">
         <div className="flex items-center justify-evenly w-full gap-[30px] max-[699px]:flex-col-reverse">
@@ -204,6 +204,7 @@ const Create: React.FC = () => {
                       alt="Generate"
                       width={40}
                       height={40}
+                      loading="lazy"
                       className="h-[40px] w-auto"
                     />
                     {generating ? "Generating..." : "Generate Image"}
@@ -218,6 +219,7 @@ const Create: React.FC = () => {
                       alt="Post"
                       width={40}
                       height={40}
+                      loading="lazy"
                       className="h-[40px] w-auto"
                     />
                     Post Image
@@ -235,6 +237,7 @@ const Create: React.FC = () => {
                     alt="Generated"
                     width={parseInt(width)}
                     height={parseInt(height)}
+                    loading="lazy"
                     className="rounded-lg max-w-full max-h-[80vh] object-contain mx-auto"
                   />
 
@@ -250,6 +253,7 @@ const Create: React.FC = () => {
                         alt="Download"
                         width={25}
                         height={25}
+                        loading="lazy"
                         className="z-50 absolute !h-6 !w-auto top-[-40px] right-[30px]"
                       />
                     </div>
@@ -272,6 +276,7 @@ const Create: React.FC = () => {
           onLoginRedirect={handleLoginRedirect}
         />
       )}
+      <Toaster richColors position="bottom-right" theme="dark" />
     </>
   );
 };

@@ -1,4 +1,3 @@
-// src/Navbar.js
 import React, { useState } from "react";
 import { useAuth } from "../context/AuthContext";
 import { LogOut, User, X } from "lucide-react";
