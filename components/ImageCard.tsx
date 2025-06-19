@@ -34,11 +34,11 @@ const ImageCard: React.FC<ImageCardProps> = ({ post }) => {
   const profilePicUrl = getOptimizedUrl(post.user?.profilePic);
 
   return (
-    <div className="relative rounded-[15px] overflow-hidden group cursor-pointer transition-transform hover:scale-105">
+    <div className="relative rounded-2xl overflow-hidden group cursor-pointer transition-transform hover:scale-105">
       <LazyLoadImage
         src={secureUrl}
         alt="Generated image"
-        className="w-full rounded-[15px] object-cover"
+        className="w-full rounded-2xl object-cover"
         placeholderSrc="/images/placeholder.png"
       />
       <div className="absolute inset-0 opacity-0 group-hover:opacity-100 backdrop-blur-md bg-[#253b5070] transition-opacity p-5 flex flex-col justify-end gap-2">
