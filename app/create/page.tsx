@@ -4,7 +4,11 @@ import { useAuth } from "../../context/AuthContext";
 import axios from "axios";
 import Navbar from "../../components/Navbar";
 import FileSaver from "file-saver";
-import Modal from "../../components/Modal";
+import dynamic from "next/dynamic";
+const LazyModal = dynamic(() => import("../../components/Modal"), {
+  ssr: false,
+  loading: () => null,
+});
 import { Toaster, toast } from "sonner";
 import Image from "next/image";
 
@@ -268,7 +272,7 @@ const Create: React.FC = () => {
         </div>
       </div>
       {showLoginModal && (
-        <Modal
+        <LazyModal
           onClose={handleCloseModal}
           onLoginRedirect={handleLoginRedirect}
         />
