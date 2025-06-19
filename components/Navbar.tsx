@@ -48,7 +48,7 @@ const Navbar = () => {
           </Link>
           {isLoggedIn ? (
             <button
-              className="btn px-4 py-2 cursor-pointer text-wh flex gap-2 bg-[#253b50] rounded-lg hover:bg-[#384d60]"
+              className="btn px-4 py-2 cursor-pointer text-wh flex gap-2 justify-center items-center bg-[#253b50] rounded-lg hover:bg-[#384d60]"
               onClick={logout}
             >
               <LogOut />
