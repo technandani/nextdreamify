@@ -135,7 +135,7 @@ export async function POST(req: NextRequest) {
         success: true,
         message: 'Login successful.',
         token,
-        name: user.name,
+        user: {email:user?.email, name:user?.name},
       });
     } catch (err) {
       const error = err instanceof Error ? err : new Error('Unknown error');

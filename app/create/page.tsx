@@ -7,15 +7,73 @@ import FileSaver from "file-saver";
 import Modal from "../../components/Modal";
 import { Toaster, toast } from "sonner";
 import Image from "next/image";
+import { Maximize, Ratio, RectangleHorizontal, RectangleVertical, Square } from "lucide-react";
 
 const Create: React.FC = () => {
   const { isLoggedIn } = useAuth();
   const [prompt, setPrompt] = useState("");
-  const [width, setWidth] = useState("800");
-  const [height, setHeight] = useState("800");
+  const [width, setWidth] = useState("512");
+  const [height, setHeight] = useState("512");
   const [generating, setGenerating] = useState(false);
   const [generatedImage, setGeneratedImage] = useState<string | null>(null);
   const [showLoginModal, setShowLoginModal] = useState(false);
+  const [selectedAspect, setSelectedAspect] = useState("1:1");
+
+  const [style, setStyle] = useState("default");
+
+  const styleOptions = [
+    {
+      value: "default",
+      label: "Default",
+      description: "Balanced, general-purpose image style",
+    },
+    {
+      value: "realistic",
+      label: "Realistic",
+      description: "Looks like a real photograph, perfect for lifelike scenes",
+    },
+    {
+      value: "cartoon",
+      label: "Cartoon",
+      description: "Bright, playful, bold outlines like animated shows",
+    },
+    {
+      value: "digital-art",
+      label: "Digital Art",
+      description: "Stylish modern art, great for fantasy or sci-fi scenes",
+    },
+    {
+      value: "anime",
+      label: "Anime",
+      description:
+        "Japanese manga style with vibrant and expressive characters",
+    },
+    {
+      value: "sketch",
+      label: "Sketch",
+      description: "Hand-drawn pencil style, black and white or line art",
+    },
+    {
+      value: "oil-painting",
+      label: "Oil Painting",
+      description: "Classic textured canvas look, rich in color and depth",
+    },
+    {
+      value: "cyberpunk",
+      label: "Cyberpunk",
+      description: "Futuristic, neon-lit city vibes with tech aesthetics",
+    },
+    {
+      value: "watercolor",
+      label: "Watercolor",
+      description: "Soft, artistic style with paint-like color flow",
+    },
+    {
+      value: "pixel-art",
+      label: "Pixel Art",
+      description: "Retro video game style, low-res pixel blocks",
+    },
+  ];
 
   const dimensionOptions = [
     "512",
@@ -26,6 +84,23 @@ const Create: React.FC = () => {
     "1536",
     "2048",
   ];
+
+  const aspectRatios = [
+    { id: "1:1", label: "1:1", icon: Square, width: 512, height: 512 },
+    { id: "16:9", label: "16:9", icon: RectangleHorizontal, width: 768, height: 432 },
+    { id: "9:16", label: "9:16", icon: RectangleVertical, width: 432, height: 768 },
+    { id: "4:3", label: "4:3", icon: Square, width: 640, height: 480 },
+    { id: "3:4", label: "3:4", icon: Square, width: 480, height: 640 },
+  ];
+
+  const setAspectRatio = (ratio: string) => {
+    const selected = aspectRatios.find((r) => r.id === ratio);
+    if (selected) {
+      setWidth(selected.width);
+      setHeight(selected.height);
+    }
+    setSelectedAspect(ratio);
+  };
 
   const getCookie = (name: string): string | null => {
     const value = `; ${document.cookie}`;
@@ -58,11 +133,10 @@ const Create: React.FC = () => {
       const response = await axios.get(
         `/api/image?prompt=${encodeURIComponent(
           prompt
-        )}&width=${width}&height=${height}`,
-        {
-          timeout: 30000,
-        }
+        )}&width=${width}&height=${height}&style=${encodeURIComponent(style)}`,
+        { timeout: 30000 }
       );
+
       setGeneratedImage(response.data.imageUrl);
       // toast.success("Image generated successfully!");
     } catch (err: unknown) {
@@ -150,7 +224,7 @@ const Create: React.FC = () => {
                   <textarea
                     value={prompt}
                     onChange={handlePromptChange}
-                    className="border border-white h-[30vmin] w-full rounded-lg bg-transparent px-3 py-3"
+                    className="border border-white h-[20vmin] w-full rounded-lg bg-transparent px-3 py-3"
                     placeholder="Enter your image prompt..."
                   ></textarea>
                 </div>
@@ -192,6 +266,47 @@ const Create: React.FC = () => {
                     </select>
                   </div>
                 </div>
+                <div>
+                  <div>Aspect Ratio Presets</div>
+                  <div className="grid grid-cols-3 md:grid-cols-6 gap-2 mt-2">
+                    {aspectRatios.map((ratio) => (
+                      <div
+                        key={ratio.id}
+                        onClick={() => setAspectRatio(ratio.id)}
+                        className={`h-auto py-2 px-2 gap-1 flex justify-center items-center rounded cursor-pointer
+      ${
+        selectedAspect === ratio.id
+          ? "bg-white text-gray-900 border-none"
+          : "hover:bg-gray-700 bg-gray-800 text-gray-300"
+      }
+    `}
+                      >
+                        <ratio.icon className="w-4 h-4 mr-1" />
+                        {ratio.label}
+                      </div>
+                    ))}
+                  </div>
+                </div>
+                <div className="flex-1">
+                  <div className="inputTitle">Style</div>
+                  <select
+                    value={style}
+                    onChange={(e) => setStyle(e.target.value)}
+                    className="border border-white w-full rounded-lg bg-transparent px-3 py-3"
+                  >
+                    {styleOptions.map((opt) => (
+                      <option
+                        key={opt.value}
+                        value={opt.value}
+                        className="bg-[#253b50] text-sm"
+                        title={opt.description} // Tooltip on hover
+                      >
+                        {opt.label} — {opt.description}
+                      </option>
+                    ))}
+                  </select>
+                </div>
+
                 <div className="CreatePostBtns flex gap-4">
                   <button
                     type="submit"

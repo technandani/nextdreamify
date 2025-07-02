@@ -67,10 +67,10 @@ const Login: React.FC = () => {
         { email, password },
         { withCredentials: true }
       );
-      const { success, token, name, message } = response.data;
+      const { success, token, user, message } = response.data;
       if (success) {
         Cookies.set("uid", token, { expires: 5 });
-        Cookies.set("loggedInUser", name, { expires: 5 });
+        Cookies.set("loggedInUser", JSON.stringify({ email: user.email, name: user.name }), { expires: 5 });
         loginUser();
         toast.success("Login successful!");
         setEmail("");

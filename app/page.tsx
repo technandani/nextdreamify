@@ -67,7 +67,7 @@ const Home: React.FC = () => {
     <>
       <Navbar />
       <HeroSection />
-      <div className="mainContainer max-w-7xl mx-auto p-8">
+      <div className="mainContainer max-w-7xl mx-auto p-8 sm:p-2 max-sm:p-2">
         <div className="searchContainer text-center mb-8">
           <h2 className="text-2xl font-bold text-white">
             Explore popular posts in this community

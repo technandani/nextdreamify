@@ -34,43 +34,50 @@ const ImageCard: React.FC<ImageCardProps> = ({ post }) => {
   const profilePicUrl = getOptimizedUrl(post.user?.profilePic);
 
   return (
-    <div className="relative rounded-2xl overflow-hidden group cursor-pointer transition-transform hover:scale-105">
-      <LazyLoadImage
-        src={secureUrl}
-        alt="Generated image"
-        className="w-full rounded-2xl object-cover"
-        placeholderSrc="/images/placeholder.png"
-      />
-      <div className="absolute inset-0 opacity-0 group-hover:opacity-100 backdrop-blur-md bg-[#253b5070] transition-opacity p-5 flex flex-col justify-end gap-2">
-        <p className="!text-xs md:text-base">
-          {post.prompt || "No prompt available"}
-        </p>
-        <div className="flex justify-between w-full">
-          <div className="flex items-center gap-2 text-sm md:text-base">
-            <div className="h-6 w-6 rounded-full overflow-hidden bg-black flex items-center justify-center">
-              <Image
-                src={profilePicUrl}
-                alt="Author"
-                width={24}
-                height={24}
-                loading="lazy"
-                className="rounded-full h-full w-full object-cover"
-              />
-            </div>
-            <div className="!text-sm truncate max-w-[100px]">
-              {post.user?.name || "Unknown"}
-            </div>
-          </div>
-          <button
-            onClick={() => isValidUrl(post.url) && FileSaver.saveAs(post.url, "download.jpg")}
-            disabled={!isValidUrl(post.url)}
-            className="hover:scale-105 transition-transform"
-          >
-            <ArrowDownToLine size={20} absoluteStrokeWidth />
-          </button>
+    <div
+  className="relative rounded-2xl overflow-hidden group cursor-pointer transition-transform hover:scale-105 focus-within:scale-105"
+  tabIndex={0} // Make div focusable for mobile
+>
+  <LazyLoadImage
+    src={secureUrl}
+    alt="Generated image"
+    className="w-full rounded-2xl object-cover"
+    placeholderSrc="/images/placeholder.png"
+  />
+
+  <div className="absolute inset-0 opacity-0 group-hover:opacity-100 group-focus-within:opacity-100 backdrop-blur-md bg-[#253b5070] transition-opacity p-5 flex flex-col justify-end gap-2 pointer-events-none">
+    <p className="!text-xs md:text-base">
+      {post.prompt || "No prompt available"}
+    </p>
+
+    <div className="flex justify-between w-full pointer-events-auto">
+      <div className="flex items-center gap-2 text-sm md:text-base">
+        <div className="h-6 w-6 rounded-full overflow-hidden bg-black flex items-center justify-center">
+          <Image
+            src={profilePicUrl}
+            alt="Author"
+            width={24}
+            height={24}
+            loading="lazy"
+            className="rounded-full h-full w-full object-cover"
+          />
+        </div>
+        <div className="!text-sm truncate max-w-[100px]">
+          {post.user?.name || "User"}
         </div>
       </div>
+      <button
+        onClick={() =>
+          isValidUrl(post.url) && FileSaver.saveAs(post.url, "download.jpg")
+        }
+        disabled={!isValidUrl(post.url)}
+        className="hover:scale-105 transition-transform"
+      >
+        <ArrowDownToLine size={20} absoluteStrokeWidth />
+      </button>
     </div>
+  </div>
+</div>
   );
 };
 
