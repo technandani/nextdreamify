@@ -12,8 +12,8 @@ import { RectangleHorizontal, RectangleVertical, Square } from "lucide-react";
 const Create: React.FC = () => {
   const { isLoggedIn } = useAuth();
   const [prompt, setPrompt] = useState("");
-  const [width, setWidth] = useState("512");
-  const [height, setHeight] = useState("512");
+  const [width, setWidth] = useState<number>(512);
+  const [height, setHeight] = useState<number>(512);
   const [generating, setGenerating] = useState(false);
   const [generatedImage, setGeneratedImage] = useState<string | null>(null);
   const [showLoginModal, setShowLoginModal] = useState(false);
@@ -87,8 +87,20 @@ const Create: React.FC = () => {
 
   const aspectRatios = [
     { id: "1:1", label: "1:1", icon: Square, width: 512, height: 512 },
-    { id: "16:9", label: "16:9", icon: RectangleHorizontal, width: 768, height: 432 },
-    { id: "9:16", label: "9:16", icon: RectangleVertical, width: 432, height: 768 },
+    {
+      id: "16:9",
+      label: "16:9",
+      icon: RectangleHorizontal,
+      width: 768,
+      height: 432,
+    },
+    {
+      id: "9:16",
+      label: "9:16",
+      icon: RectangleVertical,
+      width: 432,
+      height: 768,
+    },
     { id: "4:3", label: "4:3", icon: Square, width: 640, height: 480 },
     { id: "3:4", label: "3:4", icon: Square, width: 480, height: 640 },
   ];
