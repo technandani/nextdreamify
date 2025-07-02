@@ -16,9 +16,11 @@ const Navbar = () => {
   return (
     <header>
       <div className="navLeft">
-        <Link href="/">
-          <h1 className="logo font-bold">Dreamify</h1>
-        </Link>
+        <Link href="/" className="flex items-center space-x-2">
+              <span className="lg:px-14 max-sm:px-4 px-4 sm:px-4 lg:text-4xl text-2xl font-extrabold bg-gradient-to-r from-orange-600 to-yellow-600 bg-clip-text text-transparent">
+                Dreamify
+              </span>
+            </Link>
       </div>
       <div className="navRight">
         <div className="responsiveMenu" onClick={toggleMenu}>

@@ -131,12 +131,12 @@ const HeroSection: React.FC = () => {
           >
             <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 text-center text-white z-10 min-w-[90vw] md:min-w-0">
               <h1
-                className="text-3xl md:text-5xl font-bold mb-4 animate-[fadeInDown_2s_ease] [text-shadow:0_1px_4px_rgba(0,0,0,0.76)]"
+                className="text-3xl max-sm:text-2xl sm:text-2xl md:text-5xl font-bold mb-4 animate-[fadeInDown_2s_ease] [text-shadow:0_1px_4px_rgba(0,0,0,0.76)]"
               >
                 {item.title}
               </h1>
               <p
-                className="text-base md:text-xl mb-8 animate-[fadeInUp_2s_ease] [text-shadow:0_1px_4px_rgba(0,0,0,0.78)]"
+                className="text-base max-sm:text-sm sm:text-sm md:text-xl mb-8 animate-[fadeInUp_2s_ease] [text-shadow:0_1px_4px_rgba(0,0,0,0.78)]"
               >
                 {item.paragraph}
               </p>
