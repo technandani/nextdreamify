@@ -7,7 +7,7 @@ import FileSaver from "file-saver";
 import Modal from "../../components/Modal";
 import { Toaster, toast } from "sonner";
 import Image from "next/image";
-import { Maximize, Ratio, RectangleHorizontal, RectangleVertical, Square } from "lucide-react";
+import { RectangleHorizontal, RectangleVertical, Square } from "lucide-react";
 
 const Create: React.FC = () => {
   const { isLoggedIn } = useAuth();
