@@ -126,11 +126,11 @@ const Create: React.FC = () => {
   };
 
   const handleWidthChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
-    setWidth(e.target.value);
+    setWidth(parseInt(e.target.value));
   };
 
   const handleHeightChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
-    setHeight(e.target.value);
+    setHeight(parseInt(e.target.value));
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -192,8 +192,8 @@ const Create: React.FC = () => {
         toast.success("Post created successfully!");
         setPrompt("");
         setGeneratedImage(null);
-        setWidth("800");
-        setHeight("800");
+        setWidth(512);
+        setHeight(512);
       } catch (err: unknown) {
         console.error("Error posting image:", err);
         const message = axios.isAxiosError(err)
@@ -361,8 +361,8 @@ const Create: React.FC = () => {
                   <Image
                     src={generatedImage}
                     alt="Generated"
-                    width={parseInt(width)}
-                    height={parseInt(height)}
+                    width={width}
+                    height={height}
                     loading="lazy"
                     className="rounded-lg max-w-full max-h-[80vh] object-contain mx-auto"
                   />
